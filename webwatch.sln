@@ -1,0 +1,83 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "util\util.vcproj", "{80844147-6752-4C10-82AA-7220EF90FAA2}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core", "core\core.vcproj", "{9E86FE8E-F387-404D-AD1D-7CE7E47B53C7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F65EC1D-2879-4080-802B-275E66A8DFE6} = {4F65EC1D-2879-4080-802B-275E66A8DFE6}
+		{80844147-6752-4C10-82AA-7220EF90FAA2} = {80844147-6752-4C10-82AA-7220EF90FAA2}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui", "gui\gui.vcproj", "{6E6D0FC3-27A3-4302-9F26-1D59B9180572}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F65EC1D-2879-4080-802B-275E66A8DFE6} = {4F65EC1D-2879-4080-802B-275E66A8DFE6}
+		{80844147-6752-4C10-82AA-7220EF90FAA2} = {80844147-6752-4C10-82AA-7220EF90FAA2}
+		{9E86FE8E-F387-404D-AD1D-7CE7E47B53C7} = {9E86FE8E-F387-404D-AD1D-7CE7E47B53C7}
+		{071D9DB9-4A64-4F4A-B810-7CFC437D3EAF} = {071D9DB9-4A64-4F4A-B810-7CFC437D3EAF}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xml", "xml\XML.vcproj", "{4F65EC1D-2879-4080-802B-275E66A8DFE6}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nicon", "nicon\nicon.vcproj", "{071D9DB9-4A64-4F4A-B810-7CFC437D3EAF}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 5
+		SccLocalPath0 = .
+		CanCheckoutShared = false
+		SolutionUniqueID = {ECCC8BD8-AA94-4752-810E-ADEAE69F73E0}
+		SccProjectUniqueName1 = core\\core.vcproj
+		SccLocalPath1 = .
+		CanCheckoutShared = false
+		SccProjectFilePathRelativizedFromConnection1 = core\\
+		SccProjectUniqueName2 = gui\\gui.vcproj
+		SccLocalPath2 = .
+		CanCheckoutShared = false
+		SccProjectFilePathRelativizedFromConnection2 = gui\\
+		SccProjectUniqueName3 = util\\util.vcproj
+		SccLocalPath3 = .
+		CanCheckoutShared = false
+		SccProjectFilePathRelativizedFromConnection3 = util\\
+		SccProjectUniqueName4 = xml\\XML.vcproj
+		SccProjectName4 = \u0022$/xml\u0022,\u0020BAAAAAAA
+		SccLocalPath4 = xml
+		CanCheckoutShared = false
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{80844147-6752-4C10-82AA-7220EF90FAA2}.Debug.ActiveCfg = Debug|Win32
+		{80844147-6752-4C10-82AA-7220EF90FAA2}.Debug.Build.0 = Debug|Win32
+		{80844147-6752-4C10-82AA-7220EF90FAA2}.Release.ActiveCfg = Release|Win32
+		{80844147-6752-4C10-82AA-7220EF90FAA2}.Release.Build.0 = Release|Win32
+		{9E86FE8E-F387-404D-AD1D-7CE7E47B53C7}.Debug.ActiveCfg = Debug|Win32
+		{9E86FE8E-F387-404D-AD1D-7CE7E47B53C7}.Debug.Build.0 = Debug|Win32
+		{9E86FE8E-F387-404D-AD1D-7CE7E47B53C7}.Release.ActiveCfg = Release|Win32
+		{9E86FE8E-F387-404D-AD1D-7CE7E47B53C7}.Release.Build.0 = Release|Win32
+		{6E6D0FC3-27A3-4302-9F26-1D59B9180572}.Debug.ActiveCfg = Debug|Win32
+		{6E6D0FC3-27A3-4302-9F26-1D59B9180572}.Debug.Build.0 = Debug|Win32
+		{6E6D0FC3-27A3-4302-9F26-1D59B9180572}.Release.ActiveCfg = Release|Win32
+		{6E6D0FC3-27A3-4302-9F26-1D59B9180572}.Release.Build.0 = Release|Win32
+		{4F65EC1D-2879-4080-802B-275E66A8DFE6}.Debug.ActiveCfg = Debug|Win32
+		{4F65EC1D-2879-4080-802B-275E66A8DFE6}.Debug.Build.0 = Debug|Win32
+		{4F65EC1D-2879-4080-802B-275E66A8DFE6}.Release.ActiveCfg = Release|Win32
+		{4F65EC1D-2879-4080-802B-275E66A8DFE6}.Release.Build.0 = Release|Win32
+		{071D9DB9-4A64-4F4A-B810-7CFC437D3EAF}.Debug.ActiveCfg = Debug|Win32
+		{071D9DB9-4A64-4F4A-B810-7CFC437D3EAF}.Debug.Build.0 = Debug|Win32
+		{071D9DB9-4A64-4F4A-B810-7CFC437D3EAF}.Release.ActiveCfg = Release|Win32
+		{071D9DB9-4A64-4F4A-B810-7CFC437D3EAF}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

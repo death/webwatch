@@ -1,0 +1,4 @@
+- Site Duplicate Finder
+- Fix ugly UI -> fix site modify
+- Don't use wininet for ftp
+- Have Save/Reload configuration options

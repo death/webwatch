@@ -1,0 +1,19 @@
+<Site>
+    <Name>My site</Name>
+    <Address>http://death.darktech.org/</Address>
+    <Notes>This is\r\nmy site!</Notes>
+    <CheckParams Method="HttpContent">
+        <Socket Mode="Plain"/>
+        <Filter Method="StripHtml" SkipScript="True"/>
+        <Regex>PUNK MEANS THINKING FOR [A-Z]+!</Regex>
+    </CheckParams>
+    <CheckTime Day="27" Month="1" Year="1984" Hour="0" Minute="0" Second="0"/>
+    <CheckResults>
+        <RegexSearchResult>
+            <Regex>PUNK MEANS THINKING FOR [A-Z]+!</Regex>
+            <Result>PUNK MEANS THINKING FOR YOURSELF!</Result>
+        </RegexSearchResult>
+    </CheckResults>
+	<!-- The following can be added by the UI -->
+	<UISettings CheckByDefault="True"/>
+</Site>

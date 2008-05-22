@@ -1,0 +1,704 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>WebWatch application design</title>
+</head>
+
+<body>
+
+<h1 align="center" dir="ltr"><u>WebWatch Design</u></h1>
+<ol>
+  <li>
+  <a href="#1. WebWatch Application">WebWatch Application</a><ol>
+  <li>
+  <a href="#1. Check mechanism">Check mechanism</a></li>
+  <li>
+  <a href="#2. A centralized data store">A centralized data 
+  store</a></li>
+  <li>
+  <a href="#3. Site and SiteItem">Site and SiteItem</a></li>
+  <li>
+  <a href="#4. Site list control">Site list control</a></li>
+  <li>
+  <a href="#5. Site groups">Site groups</a></li>
+  <li>
+  <a href="#6. Site group tree control">Site group tree control</a></li>
+  <li>
+  <a href="#7. Tray notification icon">Tray notification icon</a></li>
+  <li>
+  <a href="#8. Application menu and toolbar">
+  Application menu and toolbar</a></li>
+  <li>
+  <a href="#9. Keyboard short-cuts">Keyboard short-cuts</a></li>
+  <li>
+  <a href="#10. Add/Modify site dialog">Add/Modify site dialog</a></li>
+  <li>
+  <a href="#11. Add/Modify group dialog">Add/Modify group dialog</a></li>
+  <li>
+  <a href="#12. Automatic configuration saving">Automatic 
+  configuration saving</a></li>
+  <li>
+  <a href="#13. Automatic site group checking">Automatic site 
+  group checking</a></li>
+  <li>
+  <a href="#14. Configuration backup system">Configuration 
+  backup system</a></li>
+  <li>
+  <a href="#15. Site operation manager">Site operation manager</a></li>
+</ol>
+  </li>
+  <li>
+  <a href="#2. WebWatch Core">WebWatch Core</a><ol>
+  <li>
+  <a href="#1. Socket Implementation">Socket Implementation</a></li>
+  <li>
+  <a href="#2. Check Methods">Check Methods</a></li>
+</ol>
+  </li>
+</ol>
+  <p align="left">
+  <a href="#Appendix A - Backwards compatibility with old WebWatch">Appendix A - 
+  Backwards compatibility with old WebWatch</a><br>
+  <a href="#Appendix B - Minor Update">Appendix B - Minor Update</a><br>
+&nbsp;<hr>
+  <h2 align="left">
+  <u><a name="1. WebWatch Application">1. WebWatch Application</a></u></h2>
+<hr>
+<p><b><u><a name="1. Check mechanism">1. Check mechanism</a></u></b></p>
+<p><b><u>1.1 From user's view</u></b></p>
+<p>The user will see a modal dialog with:</p>
+<ul>
+  <li>A progress bar - Indicating progress on how many sites were checked so 
+  far.</li>
+  <li>A list control - Indicating currently running site checks and their status 
+  (for example, <i>connecting</i> or <i>receiving</i>).</li>
+  <li>A minimize facility - Will minimize WebWatch into the tray notification 
+  area.</li>
+  <li>An abort facility - Will abort the checker. It is emphasized that the 
+  operation should be aborted in less than 5 seconds (if possible), contrary to old WebWatch 
+  implementation.</li>
+</ul>
+<p>In the case when a check operation is dispatched while WebWatch is not the 
+foreground window (e.g. in auto-checking), the checker should not grab user attention 
+or interfere with foreground windows. After checking,  the user may be notified. Various notification mechanisms 
+exist:</p>
+<ul>
+  <li>
+  Notification icon animation.</li>
+  <li>
+  Play a sound.</li>
+  <li>
+  Display a message box.</li>
+  <li>
+  Restore window if minimize, flash window if not.</li>
+</ul>
+
+<p><b><u>1.2 From programmer's view</u></b></p>
+<ul>
+  <li>The checker takes a list of Site objects, without regard for site groups - 
+  this is so a single site, or multiple selection of sites can be checked, and 
+  not just a site group.</li>
+  <li>At the moment, the core site checking is implemented using blocking 
+  sockets. This mandates that each site check should be done in a separate 
+  thread. This may change.</li>
+  <li>The checker should be aware of site check error reporting (implemented 
+  using exceptions).</li>
+  <li>For each site checked, a verbose status string is generated. This is to 
+  supply the user with more information when needed (the regular status 
+  reporting is through colors of entries in the site list).</li>
+</ul>
+<p><u><b>1.3 Warnings</b></u></p>
+<p>The check mechanism can warn the user about two kinds of situations:</p>
+<ul>
+  <li>Downloading more than X Kb of content - this warning is not implemented, 
+  because at the moment the only method of notifying the user without making an 
+  explicit error is something like a message box, which will interrupt the 
+  checking process.</li>
+  <li>Recursively checking a forwarded URL - this is treated as an error.</li>
+</ul>
+<hr>
+<p><b><u><a name="2. A centralized data store">2. A centralized data store</a></u></b></p>
+<p>WebWatch will use a centralized data store. The data store will contain the 
+following:</p>
+<ul>
+  <li>Site groups, and therefore sites.</li>
+  <li>Misc. settings (user interface settings, check settings, general settings, 
+  etc.).</li>
+</ul>
+<p>The data store will also be able to perform persistence operations (saving 
+and loading WebWatch configuration, exporting and importing site groups). Safety 
+while saving configuration is crucial - 
+<a href="#14. Configuration backup system">make a backup of older configuration file</a>.</p>
+<hr>
+<p><u><b><a name="3. Site and SiteItem">3. Site and SiteItem</a></b></u></p>
+<p>In order to use a Site in a context larger than core manipulation itself, 
+such as application features, we need to hold more data relating to the context. 
+Thus, we derive a new class, SiteItem, from the core Site class. An example of 
+such data, is the check-by-default field (whether a site will be checked when 
+its parent group is checked).</p>
+<p>A site knows about its parent group. The reason is to facilitate actions such 
+a site deletion and moving of the site to another group.</p>
+<p><b><u>3.1 SiteItem additional data</u></b></p>
+<p>Additional information provided by a SiteItem is:</p>
+<ul>
+  <li><i>Name/Notes</i>.</li>
+  <li><i>Check-by-default </i>- Provides information on whether a site should be 
+  checked when its parent group is checked, Boolean.</li>
+  <li><i>Verbose status message</i> - Provides a string that can be displayed to 
+  the user about the state of the site, for example <i>&quot;Could not negotiate 
+  secure link&quot; </i>or <i>&quot;Updated</i>&quot;.</li>
+  <li><i>Site state</i> - Provides information about site state, for example <i>
+  updated</i> or <i>erroneous</i>.</li>
+  <li><i>Minor-update period information </i>- this consists of a start time of 
+  the <i>minor-update</i>.</li>
+</ul>
+<hr>
+<p><u><b><a name="4. Site list control">4. Site list control</a></b></u></p>
+<p>A site list control is actually a specialized ListView control. Some 
+attributes of the site list:</p>
+<ul>
+  <li>
+The list acts on one site group, known as the 'current site group' in 
+the context of the list. However, it can communicate with other groups - one 
+purpose, for example, is to move a site to another group.</p>
+  </li>
+  <li>Supports resizing.</li>
+  <li>
+  <a href="#4.1 Columns">The ListView is in report mode and has 
+  several columns.</a></li>
+  <li>Supports sorting by choosing a specific column.</li>
+  <li>
+  <a href="#4.2 Site entry colors">Site entries have colors 
+  representing their states.</a></li>
+  <li>
+  <a href="#4.3 Site operation handling">The list delegates site 
+  operations to the site operation manager.</a></li>
+</ul>
+<p><b><u><a name="4.1 Columns">4.1 Columns</a></u></b></p>
+<p>A site list is a report list and has several columns. The columns 
+defined are:</p>
+<ul>
+  <li>
+<i>Check-by-default</i> - Each entry has a check box specifying 
+whether the Site will be checked when its parent group is checked. The original 
+reason this is a column by itself is that the check box cannot co-exist (to my 
+knowledge) with an icon. It is also added, that this solution is better than 
+having two different types of data in the same column.
+  </li>
+  <li>
+<i>Name</i> - The site name as given by the user.
+  </li>
+  <li>
+<i>Address</i> - The site address as given by the user.
+  </li>
+  <li>
+<i>Last update</i> - The time when the site was last updated 
+(either the real time received by the site itself, or the time from WebWatch's 
+point-of-view).
+  </li>
+</ul>
+<p>The user should be able to change the widths of the columns (with 
+the exception of the check-by-default column, its width is fixed), and this 
+configuration should be persistent.</p>
+<p><b><u><a name="4.2 Site entry colors">4.2 Site entry colors</a></u></b></p>
+<p>Each site entry has a state. The state is represented by the text 
+color of the entry. The colors are configurable, but the default is:</p>
+<ul>
+  <li>
+Black - Indicates the site has no special state.
+  </li>
+  <li>
+Blue - Indicates the site is in <i>updated</i> state.
+  </li>
+  <li>
+Red - Indicates the site is in <i>erroneous</i> state.
+  </li>
+  <li>
+Green - Indicates the site is in <i>minor update notification</i> 
+mode - this is not a real state, overrides any other color.
+  </li>
+</ul>
+<p><b><u><a name="4.3 Site operation handling">4.3 Site operation 
+delegation</a></u></b></p>
+<p>The list delegates site operations dispatched by the user to the
+<a href="#15. Site operation manager">site operation manager</a>. Some of 
+the operations can operate on a single site or multiple sites, they are denoted 
+the M, others can only operate on a single site and are denoted by S. If the 
+action was performed (and not cancelled), the site list control will update 
+itself.</p>
+<ul>
+  <li>
+<i>Check</i> (M) - Sort.</li>
+  <li>
+<i>Go to site</i> (M) - None.</li>
+  <li>
+<i>Copy address to clipboard</i> (M) - None.</li>
+  <li>
+<i>Set state to updated </i>(Mark as updated) (M) - Sort.</li>
+  <li>
+<i>Unset state </i>(Unmark) (M) - Sort.</li>
+  <li>
+<i>Begin minor-update period</i> (M) - Sort.</li>
+  <li>
+
+<i>End minor-update period</i> (M) - Sort.</li>
+  <li>
+<i>Add site</i> (special case - creates a new site) - Insert into list and 
+sort.</li>
+  <li>
+<i>Modify site</i> (S) - Sort.</li>
+  <li>
+
+<i>Remove site</i> (M) - Remove from list and sort.</li>
+  <li>
+<i>Move site to group</i> (M) - Re-add the current group to the list (fully 
+invalidate the list). - Notice that this action is not performed through the 
+site operation manager. This is because the site operation manager doesn't have 
+knowledge about site groups.</li>
+</ul>
+<hr>
+<p><u><b><a name="5. Site groups">5. Site groups</a></b></u></p>
+<p>A site group contains the following:</p>
+<ul>
+  <li>
+Group name.
+  </li>
+  <li>
+A list of sites.
+  </li>
+  <li>
+A list of child groups.
+  </li>
+  <li>
+Automatic checking information:<ul>
+  <li>The <i>next-check</i> variable - This variable must be set when a group is 
+  created, when the auto-check period data is changed and when the group is 
+  checked.</li>
+  <li>Auto-check period information.</li>
+  <li>A flag to determine whether the group is included in the parent's group 
+  auto-check process.</li>
+</ul>
+  </li>
+  <li>Default proxy for contained sites.</li>
+</ul>
+<p>A site group can determine whether a specific site is included in the 
+group's, or one of the child groups site list - and which group owns it.</p>
+<p>Since the <a href="#13. Automatic site group checking">auto-check manager</a> 
+works closely with site groups, it is declared as a <b>friend</b> by the site 
+group.</p>
+<p>A site group knows who is its parent group.</p>
+<p><b><u><a name="5.1 Group check">5.1 Group check</a></u></b></p>
+<p>A group can check the site it contains (either direct or indirect sites). It 
+does so by gathering the sites needed to check (using a routine <i>AddSites</i>) 
+and passing them to the site operation manager's check routine.</p>
+<p>The <i>AddSites</i> routine is a recursive routine to add sites from the 
+calling group and its sub-groups. <i>AddSites</i> also receives two predicates, 
+whose job is to tell it which groups/sites should be added.</p>
+<p><b><u>5.2 Exporting/Importing groups</u></b></p>
+<p>WebWatch can export and import groups. Each exported group information file 
+contains a single group, and any child groups it may have. Exporting and 
+Importing groups is managed through the <a href="#2. A centralized data store">
+store object</a>.</p>
+<p><u><b>5.3 Moving a group to another parent</b></u></p>
+<p>A group can be moved to another parent group. It is not possible to move a 
+group to itself or to one of its child groups.</p>
+<p><b><u>5.4 Merging a group into another</u></b></p>
+<p>A group can be merged into another group. It is not possible to merge a group 
+into its child group (but not vice versa!) or into the root group.</p>
+<p><b><u>5.5 Site Duplicate Finder (needed?)</u></b></p>
+<hr>
+<p><u><b><a name="6. Site group tree control">6. Site group tree control</a></b></u></p>
+<p>The tree will show group names with number of sites in parenthesis. For 
+example: <i>All Sites (10), Private Sites (7), Public Sites (3)</i>.</p>
+<p><b><u>6.1 Site group colors</u></b></p>
+<p>A group's name will be highlighted using different (configurable) colors to 
+represent different states, the default colors are:</p>
+<ul>
+  <li>Black - None of the direct sites in the group has <i>minor-update notification</i> 
+  state or <i>updated</i> state.</li>
+  <li>Blue - At least one direct site in the group has an <i>updated</i> state.</li>
+  <li>Green - At least one direct site in the group has <i>minor-update notification</i> 
+  state, overrides other colors.</li>
+</ul>
+<p>We have a separate color set for the groups tree, and not use the site list 
+colors because the site list colors also specify a background, and so their text 
+colors may not be appropriate for the default tree background color.</p>
+<p><b><u>6.2 Site group operation handling</u></b></p>
+<p>All operations act on the group and its child groups, where it's relevant. The operations are:</p>
+<ul>
+  <li><i>Add</i> <i>child group</i>.</li>
+  <li><i>Remove  group</i>.</li>
+  <li><i>Modify group</i>.</li>
+  <li><i>Export group</i>.</li>
+  <li><i>Import group as child group</i>.</li>
+  <li><i>Check group sites</i>.</li>
+  <li><i>Unmark all sites in group</i>.</li>
+  <li><i>Merge into another group</i>.</li>
+  <li><i>Move into another parent group</i>.</li>
+</ul>
+<hr>
+<p><u><b><a name="7. Tray notification icon">7. Tray notification icon</a></b></u></p>
+
+<p>WebWatch sets up an icon in the system notification area when it starts up. 
+After a minimize operation, WebWatch can be restored by double clicking the 
+icon. This is a usability feature - WebWatch has the ability to check sites as a 
+background process (auto-checking). If auto-checking was set for at least one 
+group, the tip for the icon shows the time for the closest automatic check 
+process. When right clicking the icon, a popup menu is shown, containing the 
+following items:</p>
+
+<ul>
+  <li><i>Show/Hide</i> (depending on the application window's current state)</li>
+  <li><i>Exit</i></li>
+</ul>
+
+<p><b><u>7.1 Checker finish notification through icon animation</u></b></p>
+
+<hr>
+<p><u><b><a name="8. Application menu and toolbar">8. Application menu and 
+toolbar</a></b></u></p>
+<p><b><u>8.1 Application menu</u></b></p>
+<p>The application menu has the following items:</p>
+<ul>
+  <li><i>File</i> - General actions.<ul>
+    <li><i>Hide</i> - Hide main dialog.</li>
+    <li><i>Reload configuration</i>.</li>
+    <li><i>Save configuration</i>.</li>
+    <li><i>Settings</i> - Show the settings dialog.</li>
+    <li><i>Exit</i> - Exit WebWatch.</li>
+  </ul>
+  </li>
+  <li><i>View</i> - Actions pertaining to WebWatch view.<ul>
+  <li><i>Show update difference</i>.</li>
+  <li><i>Order by importance</i>.</li>
+</ul>
+  </li>
+  <li><i>Site groups</i> - Site group actions, delegates actions to the
+  <a href="#6. Site group tree control">site group tree control</a>.</li>
+  <li><i>Site</i> - Site actions, delegates actions to the
+  <a href="#4. Site list control">site list control</a>.</li>
+</ul>
+<p><b><u>8.2 Application toolbar</u></b></p>
+<p>The toolbar provides one-click actions that are already present in the 
+application menu.</p>
+<hr>
+<p><u><b><a name="9. Keyboard short-cuts">9. Keyboard short-cuts</a></b></u></p>
+<hr>
+<p><u><b><a name="10. Add/Modify site dialog">10. Add/Modify site dialog</a></b></u></p>
+<p>The dialog is actually a property sheet. It has several property 
+pages:</p>
+<ul>
+  <li>
+<i>General</i> - General site properties, such as name and address.
+  </li>
+  <li>
+<i>Check</i> - The check method used and its preferences.
+  </li>
+  <li>
+<i>MU</i> - Minor Update settings.
+  </li>
+</ul>
+<hr>
+<p><u><b><a name="11. Add/Modify group dialog">11. Add/Modify group dialog</a></b></u></p>
+<p>The dialog is a property sheet. It has several property pages:</p>
+<ul>
+  <li><i>General</i> - General group properties, such as name.</li>
+  <li><i>Auto-Check</i> - Auto-check properties.</li>
+</ul>
+<hr>
+<p><u><b><a name="12. Automatic configuration saving">12. Automatic 
+configuration saving</a></b></u></p>
+<p>An optional safety feature, can save configuration file every period of time 
+- uses the <a href="#14. Configuration backup system">configuration backup 
+system</a>.</p>
+<hr>
+<p><u><b><a name="13. Automatic site group checking">13. Automatic site group 
+checking</a></b></u></p>
+<p>WebWatch can automatically check groups periodically. The automatic checking feature is managed through an automatic check manager. 
+The auto-check manager performs auto-check maintenance by using the following 
+algorithm:</p>
+
+<p dir="ltr"><u>The <i>auto-check-algorithm</i>:</u></p>
+<ol>
+  <li>Get current time as <i>now</i>.</li>
+  <li>Get nearest group to auto-check as <i>group</i>.</li>
+  <li>If <i>group</i>'s <i>next-check</i> is below or equal to <i>now</i> then:<ol>
+  <li>Check the <i>group</i> [see <i>check-group-algorithm</i>].</li>
+</ol>
+  </li>
+</ol>
+
+<p>It is important to notice that the check process 'knows' it is due to the 
+auto-check. The reason for this is that sub-groups may or may not be included in the 
+auto-check process of their parent group. It is also emphasized that 
+auto-check inclusion is not mutually exclusive with auto-check for the 
+sub-group itself.</p>
+
+<p><u>The <i>check-group-algorithm</i> (step 3.1 of the <i>auto-check algorithm</i>):</u></p>
+
+<ol>
+  <li>Add all sites to check into a container - <i>sites-to-check</i> [see <i>
+  add-sites-algorithm</i>].</li>
+  <li>Pass <i>sites-to-check</i> to the <a href="#15. Site operation manager">Site operation manager</a> 
+  for checking.</li>
+  <li>Update <i>group</i>'s <i>next-check</i>.</li>
+</ol>
+<p><u>The <i>add-sites-algorithm</i> (step 1 of the <i>check-group-algorithm</i>):</u></p>
+<ol>
+  <li>Add all sites in the <i>group</i> to the container.</li>
+  <li>For each <i>sub-group</i> in the <i>group</i>:<ol>
+    <li>If the <i>sub-group</i> <i>included-in-parents-auto-check</i>:<ol>
+      <li>Recurse for <i>sub-group</i>.</li>
+    </ol>
+    </li>
+  </ol>
+  </li>
+</ol>
+
+<p>The <i>next-check</i> and <i>included-in-parents-auto-check</i> variables are 
+described in the <a href="#5. Site groups">Site groups</a> section. Since the 
+auto-check manager works closely with site groups, it is declared as a <b>friend</b> 
+by the site group.</p>
+
+<p>The algorithms are partially implemented with help from the
+<a href="#5.1 Group check">Group check</a> facility.</p>
+
+<hr>
+<p><u><b><a name="14. Configuration backup system">14. Configuration backup 
+system</a></b></u></p>
+<p>Upon start-up, WebWatch copies the configuration file, if it 
+exists, to a per-run backup file. When saving the configuration, WebWatch copies 
+the old configuration file, if it exists, to a per-save backup file. This way, 
+even when WebWatch saved the configuration file more than once - the user won't 
+lose the per-run backup.</p>
+<hr>
+<p><u><b><a name="15. Site operation manager">15. Site operation manager</a></b></u></p>
+
+<p>The site operation manager is a collection of free functions, whose job is to receive one or 
+more sites and perform some kind of operation involving the sites. An exception 
+to that definition is the Add method, which receives no sites and returns one 
+site (if the user actually added it). Functions that receive a single 
+site, receive it by reference. Functions that receive multiple sites, 
+receive them by two iterators, begin and end iterators (similar to the STL 
+algorithms). The last statement means functions that receive multiple sites are 
+templated functions (the iterator type is a template parameter). Some operations 
+might need an extra window handle parameter.</p>
+
+<p>It is emphasized that the site operation manager does not have knowledge 
+about site groups.</p>
+
+<hr>
+<h2><u><a name="2. WebWatch Core">2. WebWatch Core</a></u></h2>
+<hr>
+<p><u><b><a name="1. Socket Implementation">1. Socket Implementation</a></b></u></p>
+<p>The goals in WebWatch socket library design:</p>
+<ul>
+  <li>Extensibility and object orientation</li>
+  <li><a href="#1.1 Socket connection mode (plain/secure)">Either plain or secure 
+  (SSL) mode</a></li>
+  <li><a href="#1.2 Proxy support">Support for various proxy types (such as SOCKS4, SOCKS5, HTTP CONNECT and 
+  HTTP GET)</a></li>
+  <li><a href="#1.3 Transparency towards the user">All this as transparent as possible for the library user</a></li>
+  <li><a href="#1.4 Robust error report system - Exceptions">Robust error report 
+  system - Exceptions</a></li>
+  <li><a href="#1.5 Abort-able socket operations - AbortIndicator">Abort-able socket 
+  operations - AbortIndicator.</a></li>
+</ul>
+<p><u><b><a name="1.1 Socket connection mode (plain/secure)">1.1 Socket connection mode 
+(plain/secure)</a></b></u></p>
+<p>In order to provide the connection mode support (e.g. plain or SSL) an 
+abstract base class, <b>SocketImpl</b>, is defined. It provides layers above it with 
+primitive socket operations (connect, send, receive) and helper functions 
+(send/receive with different parameters, resolve host address and more). 
+<b>SocketImpl</b> works with TCP sockets. In order to support a client's abort 
+requests, the class needs an <b>
+<a href="#1.5 Abort-able socket operations - AbortIndicator">AbortIndicator</a></b> 
+implementer object.</p>
+<p>A plain connection mode socket class, <b>PlainSocketImpl</b>, is derived from 
+<b>SocketImpl</b>.</p>
+<p>A secure connection mode socket class, <b>SecureSocketImpl</b>, is derived from 
+<b>PlainSocketImpl</b>. It uses SSL to establish a secure connection channel.</p>
+
+<p><b><u><a name="1.2 Proxy support">1.2 Proxy support</a></u></b></p>
+<p>Provided is a simple, direct-connection HTTP socket class. The class,<b> 
+HttpSocket</b>,<b> </b>receives ownership of a <b>SocketImpl</b>, and uses it to do the 
+actual primitives. The class will serve as a base class for proxy channeled 
+socket classes. Two customizable actions are supplied - Connect and Create HTTP 
+Request.</p>
+<p><b>ProxyHttpSocket</b>, derived from <b>HttpSocket</b> is the base class for 
+socket classes that use proxies. It supplies its derivatives with a proxy 
+address.</p>
+<p>Currently implemented proxy classes are: <b>Socks4ProxyHttpSocket</b>, <b>
+Socks5ProxyHttpSocket</b>, <b>HttpConnectProxyHttpSocket</b>, <b>
+HttpGetProxyHttpSocket</b>.</p>
+<p><b><u><a name="1.3 Transparency towards the user">1.3 Transparency towards the user</a></u></b></p>
+<p>A socket object factory,<b> HttpSocketFactory </b>is implemented. The 
+arguments are:</p>
+<ol>
+  <li><a href="#1.5 Abort-able socket operations - AbortIndicator">An AbortIndicator 
+  instance</a></li>
+  <li>Connection mode: Plain/Secure</li>
+  <li>If proxy is used (socket isn't direct), proxy type and proxy address</li>
+</ol>
+<p>Thus, for 2 and 3, a simple XML structure should be passed to the factory. Example 
+configurations:</p>
+<pre>&lt;Socket Mode=&quot;Plain&quot;&gt;&lt;Proxy Type=&quot;Socks4&quot;&gt;my.proxy.net:8080&lt;/Proxy&gt;&lt;/Socket&gt;</pre>
+<pre>&lt;Socket Mode=&quot;Secure&quot;/&gt;</pre>
+<p>The factory either throws a <b>SocketCreationError</b> or returns an 
+std::auto_ptr&lt;<b>HttpSocket&gt;</b>. Therefore the only interfaces exposed by the 
+socket library are <b>HttpSocket</b>'s and the factory's. Of course, the XML 
+structure passed is also an important part of the socket library.</p>
+<p><b><u><a name="1.4 Robust error report system - Exceptions">1.4 Robust error report 
+system - Exceptions</a></u></b></p>
+<p>The socket library uses exceptions to report errors. All exceptions thrown 
+from the socket library code are either <b>SocketError</b> or derivatives. In 
+turn, <b>SocketError </b>derives from <b>WebWatch::Core::Exception</b>.</p>
+<p>The following exception types are defined:</p>
+<ul>
+  <li><b>SocketError</b> - The general socket library exception. Also serves as 
+  a base class for other socket library exception classes.</li>
+  <li><b>SSLError</b> - Thrown when there is a problem specific to socket 
+  security when using SSL.</li>
+  <li><b>ProxyError</b> - Thrown when there is a problem with the proxy.</li>
+  <li><b>SocketCreationError</b> - Thrown when the socket object could not be 
+  constructed. May be thrown from the constructor or HTTP socket factory.</li>
+  <li><b>HttpError</b> - Thrown when an HTTP packet is errorneous.</li>
+</ul>
+
+<p><b><u><a name="1.5 Abort-able socket operations - AbortIndicator">1.5 Abort-able socket 
+operations - AbortIndicator</a></u></b></p>
+<p>The client of the socket library should be able to abort a socket 
+operation (by calling an abort function from a different thread, for instance). 
+Because the socket operations are quite low-level in the abstraction chain 
+(above it lies the <b>HttpSocket</b> facility, and above that, a check method 
+facility) we pass around an interface, containing a single pure function - <b>
+ShouldAbort</b>, which returns a boolean value stating whether the operation 
+should be aborted.</p>
+<p>The <b>SocketImpl</b> class accepts a constant reference to such 
+interface. Since an <b>HttpSocket</b> receives a <b>SocketImpl</b> instance in 
+its constructor, we need to pass the interface to <b>HttpSocketFactory</b>.</p>
+
+<hr>
+<p><u><b><a name="2. Check Methods">2. Check Methods</a></b></u></p>
+<p>The main purpose of WebWatch is to check a given site (file, page) for an 
+update. WebWatch can do this using several methods. The methods are divided into 
+two main groups:</p>
+<ul>
+  <li>HTTP check methods (including HTTPS)</li>
+  <li>FTP check methods</li>
+</ul>
+<p>In order to represent such methods, an abstract base class,<b> CheckMethod</b>,<b>
+</b>is implemented. <b>CheckMethod</b> implements the <b>WebWatch::Core::Sockets::AbortIndicator</b> 
+interface. All check methods are abort-able.</p>
+<p>A <b>CheckMethod</b> can <i>Check</i> a specific site's state and return a <i>
+CheckResults</i> XML structure. This way, the user can, for example, check for 
+an update using the following algorithm:</p>
+<p>Initial check:</p>
+<ol>
+  <li><i>Check</i> the site. Receive the state from the check method.</li>
+  <li>Store the state in some place.</li>
+</ol>
+<p>At later date:</p>
+<ol>
+  <li><i>Check</i> the site. Receive the state.</li>
+  <li>Compare the received state with the stored state.</li>
+  <li>If the states are equal, the site wasn't updated since last check.</li>
+  <li>If the states are not equal, the site is updated. Store the received 
+  state.</li>
+</ol>
+<p>In order to work with check methods, the user shouldn't need to directly 
+interface with low-level abstractions such as sockets or proxies. However, 
+parameters passed to the check method may contain information used in the check 
+method to construct such objects.</p>
+<p>It is important to notice that a check method doesn't <i>have</i> to use the 
+WebWatch socket library. This is the case with the current FTP check method 
+implementation.</p>
+<p>A check method can report about its status to a <b>
+WebWatch::Core::CheckMethods::StatusNotifyClient</b>. The <i>Check</i> method 
+receives a pointer to an object implementing the interface; if the pointer is a 
+null pointer, no reporting is performed.</p>
+<p>A check method has an <i>Abort</i> method, that the client can call at 
+check time from a different thread. It is not guaranteed that the check method 
+will obey the abort request and return immediately from <i>Check</i>, but it's a fine goal.</p>
+<p><b><u><a name="2.1 HTTP Check methods (including HTTPS)">2.1 HTTP Check methods (including HTTPS)</a></u></b></p>
+<p>WebWatch currently supports several methods for checking HTTP 
+sites. Some of the methods have internal support for HTML, since it is common to 
+use that format in HTTP sites. The methods are:</p>
+<ul>
+  <li>
+  <b>CheckHttpSize</b> - Checks HTTP sites using the <i>
+  Content-Length</i> field in the HTTP header.</li>
+  <li>
+  <b>CheckHttpTime</b> - Checks HTTP sites using the <i>
+  Last-Modified</i> field in the HTTP header.</li>
+  <li>
+  <b>CheckHttpContent</b> - Checks HTTP sites by downloading the 
+  site content and performing operations on it.</li>
+</ul>
+<p><b><u><a name="2.2 FTP Check methods">2.2 FTP Check methods</a></u></b></p>
+<p>WebWatch currently supports only one method for checking FTP sites 
+(files) - <b>CheckFtp</b>. The method checks an FTP file's state by retrieving 
+file size and time last modified. </p>
+<p>WebWatch also supports the Ident protocol for FTP connections. 
+However, at this time, I use WinInet FTP support to implement the method. 
+Because WinInet sucks, I cannot get the local port used for the FTP session, and 
+therefore, cannot use the Ident server capability.</p>
+<p><span style="font-weight: 700"><u><a name="2.3 Check results">2.3 Check results</a></u></span></p>
+<p>The check results returned by the check methods are  XML structures. It 
+is not obligatory to supply information about the structure, since they can 
+easily be compared using the XML comparison support. But, it could be useful - for example to 
+display more information about the state. A simple state, for, lets say site 
+time could be represented like this:</p>
+<pre>&lt;CheckResults&gt;&lt;Size&gt;123982&lt;/Size&gt;&lt;/CheckResults&gt;</pre>
+<p>Notice the XML does not describe what check method is used.</p>
+<p><b><u><a name="2.4 Initialization parameters">2.4 Initialization parameters</a></u></b></p>
+<p>In order to check a site's state, a check methods <i>needs</i> a single 
+parameter, the site address. However, some methods can receive more parameters 
+affecting the underlying socket actions or even the states returned. For 
+example, a proxy address (and proxy type) to communicate through, or filters to 
+apply on the site's content.</p>
+<p>Thus, the parameters are passed as an XML structure. An example XML for 
+parameters to a <b>CheckHttpContent</b> method will be:</p>
+<div>
+<pre>&lt;CheckParameters Method=&quot;HttpContent&quot;&gt;
+	&lt;Address&gt;http://www.mysite.org/&lt;/Address&gt;
+	&lt;Socket Mode=&quot;Plain&quot;&gt;&lt;Proxy Type=&quot;Socks4&quot;&gt;my.proxy.net:8080&lt;/Proxy&gt;&lt;/Socket&gt;
+	&lt;Filter Method=&quot;StripNumbers&quot;/&gt;
+&lt;/CheckParameters&gt;</pre>
+
+</div>
+
+<p><b><u><a name="2.5 Check method exceptions">2.5 Check method exceptions</a></u></b></p>
+<p>Check methods have a single exception class, <b>CheckMethodError</b>, derived 
+from <b>WebWatch::Core::Exception</b>.</p>
+
+<hr>
+<p><u><b>
+<a name="Appendix A - Backwards compatibility with old WebWatch">Appendix A - 
+Backwards compatibility with old WebWatch</a></b></u></p>
+<p>The old WebWatch configuration file is incompatible with the new 
+one's. In order to make migration from old WebWatch to new WebWatch as easy as 
+possible, a tool to convert from the old format to the new one must be created.</p>
+
+<hr>
+<p><u><b><a name="Appendix B - Minor Update">Appendix B - Minor Update</a></b></u></p>
+<p>WebWatch supports a concept called Minor Update (MU). The details of this 
+concept are not important for us, but some clarification about its support in 
+WebWatch:</p>
+<p>When the user specifies an MU expiry date, the expiry is at this date, time 
+23:59:59.999 (as in, midnight). This means, that if for example:</p>
+<ul>
+  <li>Current date/time is 2004/01/01, 05:00:00</li>
+  <li>Minor Update expiry date is 2004/01/10 (time is 23:59:59.999)</li>
+</ul>
+<p>Then number of days until expiry is 10. If the current date/time becomes 
+2004/01/10, 05:00:00, the number of days until expiry is 1. Minor Update times 
+are always in GMT.</p>
+
+</body>
+
+</html>

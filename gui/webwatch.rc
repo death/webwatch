@@ -1,0 +1,686 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#include ""res\\WebWatch.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_WEBWATCH            ICON                    "res\\WebWatch.ico"
+IDI_WEBWATCH_BURN       ICON                    "res\\webwatch-burn.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUT DIALOGEX 0, 0, 278, 180
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "About WebWatch"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,221,158,50,13,WS_GROUP
+    CTEXT           "Static",IDC_ABOUT_TEXT,7,120,264,36,0,WS_EX_TRANSPARENT
+END
+
+IDD_MAIN DIALOGEX 0, 0, 320, 266
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | 
+    WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "WebWatch"
+MENU IDR_MAIN_MENU
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_SITE_GROUPS_TREE,"SysTreeView32",TVS_HASBUTTONS | 
+                    TVS_HASLINES | TVS_LINESATROOT | TVS_EDITLABELS | 
+                    TVS_SHOWSELALWAYS | TVS_NOSCROLL | WS_BORDER | 
+                    WS_TABSTOP,7,32,122,208
+    CONTROL         "",IDC_SITE_LIST,"SysListView32",LVS_REPORT | 
+                    LVS_ALIGNLEFT | LVS_OWNERDATA | WS_BORDER | WS_TABSTOP,
+                    131,32,182,208
+    PUSHBUTTON      "Unmark all",IDC_UNMARK_ALL,194,246,58,13
+    PUSHBUTTON      "Check",IDC_CHECK,255,246,58,13
+    LTEXT           "[Statistics]",IDC_STATISTICS_TEXT,7,251,183,8
+END
+
+IDD_SITE_GENERAL_PAGE DIALOGEX 0, 0, 235, 199
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CAPTION
+EXSTYLE WS_EX_CONTROLPARENT
+CAPTION "Property Page"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    LTEXT           "Name",IDC_STATIC,14,17,20,8
+    EDITTEXT        IDC_NAME,14,29,207,12,ES_AUTOHSCROLL
+    LTEXT           "Address",IDC_STATIC,14,44,26,8
+    EDITTEXT        IDC_ADDRESS,14,55,207,12,ES_AUTOHSCROLL
+    LTEXT           "Notes",IDC_STATIC,14,70,20,8
+    EDITTEXT        IDC_NOTES,14,81,207,65,ES_MULTILINE | ES_AUTOVSCROLL | 
+                    ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL
+    GROUPBOX        "Properties",IDC_STATIC,7,7,221,147
+END
+
+IDD_SITE_CHECK_PAGE DIALOGEX 0, 0, 235, 199
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CAPTION
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    LTEXT           "[Site type]",IDC_SITE_TYPE,7,7,221,8
+    GROUPBOX        "Check method",IDC_STATIC,7,24,221,168
+    COMBOBOX        IDC_CHECK_METHOD,124,22,96,45,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "[Check method information]",IDC_CHECK_METHOD_INFO,14,41,
+                    207,8
+END
+
+IDD_CHILD_HTTP_CONTENT DIALOGEX 14, 56, 207, 134
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_SYSMENU
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "Strip &numbers",IDC_STRIP_NUMBERS,"Button",
+                    BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,0,0,60,10
+    CONTROL         "Strip &HTML",IDC_STRIP_HTML,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,0,11,50,10
+    GROUPBOX        "HTML stripping options",IDC_HTML_STRIP_OPTIONS_GROUP,12,
+                    22,195,24
+    CONTROL         "Skip &whitespace",IDC_SKIP_WHITESPACE,"Button",
+                    BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,17,32,67,10
+    CONTROL         "Skip &script",IDC_SKIP_SCRIPT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,109,32,48,10
+    CONTROL         "",IDC_REGEXPS,"SysListView32",LVS_REPORT | 
+                    LVS_SINGLESEL | LVS_EDITLABELS | LVS_ALIGNLEFT | 
+                    LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,0,51,207,63
+    PUSHBUTTON      "&Add",IDC_ADD_REGEX,51,118,50,14
+    PUSHBUTTON      "&Remove",IDC_REMOVE_REGEX,156,118,50,14
+    PUSHBUTTON      "&Edit",IDC_EDIT_REGEX,103,118,50,14
+END
+
+IDD_SITE_MU_PAGE DIALOGEX 0, 0, 235, 199
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CAPTION
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    LTEXT           "[MU Info]",IDC_MU_INFO,13,17,208,8
+    PUSHBUTTON      "[Begin/End session]",IDC_MU_SESSION_BUTTON,138,32,83,14
+    GROUPBOX        "Minor Update",IDC_STATIC,7,7,221,47
+END
+
+IDD_SET_MU DIALOGEX 0, 0, 176, 46
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Set MU"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Set Minor Update expiry date:",IDC_STATIC,7,10,98,8
+    CONTROL         "",IDC_EXPIRY_DATE,"SysDateTimePick32",DTS_RIGHTALIGN | 
+                    WS_TABSTOP,7,20,100,14
+    DEFPUSHBUTTON   "OK",IDOK,119,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,119,24,50,14
+END
+
+IDD_SITE_CHECK DIALOGEX 0, 0, 228, 165
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
+    WS_CAPTION
+CAPTION "Checking sites..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_PROGRESS,"msctls_progress32",WS_BORDER,7,19,214,
+                    10
+    LTEXT           "[Sites checked information]",IDC_SITES_CHECKED_INFO,7,7,
+                    214,8
+    CONTROL         "",IDC_CHECKER_LIST,"SysListView32",LVS_REPORT | 
+                    LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,33,214,107
+    PUSHBUTTON      "&Minimize",IDC_MINIMIZE,121,145,48,13
+    PUSHBUTTON      "&Abort",IDC_ABORT,173,145,48,13
+END
+
+IDD_SITEGROUP_GENERAL_PAGE DIALOGEX 0, 0, 235, 60
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Property Page"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    LTEXT           "Name",IDC_STATIC,13,17,20,8
+    EDITTEXT        IDC_NAME,13,27,208,12,ES_AUTOHSCROLL
+    GROUPBOX        "Properties",IDC_STATIC,7,7,221,40
+END
+
+IDD_SITEGROUP_AUTO_CHECK_PAGE DIALOGEX 0, 0, 235, 58
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Property Page"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    CONTROL         "Included in parent's auto-check",
+                    IDC_INCLUDED_IN_PARENT_AUTOCHECK,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,7,7,116,10
+    CONTROL         "",IDC_AUTO_CHECK_SLIDER,"msctls_trackbar32",
+                    TBS_AUTOTICKS | TBS_TOP | WS_TABSTOP,14,29,207,10
+    GROUPBOX        "Auto Check",IDC_AUTO_CHECK_GROUP,7,19,221,26
+END
+
+IDD_CHOOSE_GROUP DIALOGEX 0, 0, 218, 180
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "Choose a group..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_GROUP_TREE,"SysTreeView32",TVS_HASBUTTONS | 
+                    TVS_HASLINES | TVS_LINESATROOT | TVS_SHOWSELALWAYS | 
+                    TVS_NOSCROLL | WS_BORDER | WS_TABSTOP,7,7,204,146
+    DEFPUSHBUTTON   "OK",IDOK,107,159,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,161,159,50,14
+END
+
+IDD_REGEX_EDITOR DIALOGEX 0, 0, 272, 230
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "Regex editor"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Regular expression:",IDC_STATIC,7,9,65,8
+    EDITTEXT        IDC_REGEX,7,19,258,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&Refresh",IDC_REFRESH,215,35,50,14
+    LTEXT           "Webpage content:",IDC_STATIC,7,42,61,8
+    EDITTEXT        IDC_WEBPAGE_CONTENT,7,52,258,74,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL
+    LTEXT           "Match results (666 results):",IDC_MATCH_RESULTS_STATS,7,
+                    130,130,8
+    CONTROL         "Wrap",IDC_WRAP_CONTENT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,234,128,33,10
+    CONTROL         "",IDC_MATCH_RESULTS,"SysListView32",LVS_REPORT | 
+                    LVS_ALIGNLEFT | LVS_NOSORTHEADER | WS_BORDER | 
+                    WS_TABSTOP,7,140,258,62
+    DEFPUSHBUTTON   "OK",IDOK,161,209,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,215,209,50,14
+END
+
+IDD_SETTINGS_GENERAL_PAGE DIALOGEX 0, 0, 235, 41
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Property Page"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "Auto-save",IDC_STATIC,7,7,221,27
+    CONTROL         "Enable automatic saving of configuration every 5 minutes",
+                    IDC_ENABLE_AUTO_SAVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,14,19,207,10
+END
+
+IDD_SITEGROUP_PROXY_PAGE DIALOGEX 0, 0, 235, 74
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Property Page"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "Proxy settings",IDC_STATIC,7,7,221,60
+    CONTROL         "Do not use a proxy by default",IDC_NO_PROXY,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,14,17,112,10
+    CONTROL         "Use the following proxy by default:",IDC_USE_PROXY,
+                    "Button",BS_AUTORADIOBUTTON | WS_TABSTOP,14,37,129,10
+    EDITTEXT        IDC_PROXY_ADDRESS,14,48,139,12,ES_AUTOHSCROLL
+    COMBOBOX        IDC_PROXY_TYPE,156,48,65,57,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Inherit proxy settings from parent group",
+                    IDC_INHERIT_PROXY,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,14,27,146,10
+END
+
+IDD_SETTINGS_SITE_LIST_PAGE DIALOGEX 0, 0, 235, 70
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Property Page"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "Item activation",IDC_STATIC,7,7,221,27
+    COMBOBOX        IDC_ITEM_ACTIVATION_ACTION,126,17,96,74,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "When a site is double-clicked on:",IDC_STATIC,14,19,105,
+                    8
+    GROUPBOX        "Colors",IDC_STATIC,7,36,221,27
+    COMBOBOX        IDC_ITEM_COLOR_NAME,14,46,96,74,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Sample text",IDC_COLOR_SAMPLE_TEXT,117,48,39,8
+    PUSHBUTTON      "Set...",IDC_COLOR_SET,172,46,50,13
+END
+
+IDD_SETTINGS_SITE_GROUPS_TREE_PAGE DIALOGEX 0, 0, 235, 42
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Property Page"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "Colors",-1,7,7,221,27
+    COMBOBOX        IDC_ITEM_COLOR_NAME,14,17,96,74,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Sample text",IDC_COLOR_SAMPLE_TEXT,117,19,39,8
+    PUSHBUTTON      "Set...",IDC_COLOR_SET,172,17,50,13
+END
+
+IDD_SETTINGS_MU_PAGE DIALOGEX 0, 0, 235, 41
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Property Page"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "Span",IDC_STATIC,7,7,221,27
+    LTEXT           "Number of days for MU expiry:",IDC_STATIC,13,19,100,8
+    EDITTEXT        IDC_MU_DAYS,181,17,40,12,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_MU_DAYS_SPIN,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,198,14,10,
+                    14
+END
+
+IDD_SETTINGS_CHECK_PAGE DIALOGEX 0, 0, 235, 70
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Property Page"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "Threads",IDC_STATIC,7,7,221,27
+    LTEXT           "Number of sites that can be simultaneously checked:",
+                    IDC_STATIC,13,19,169,8
+    EDITTEXT        IDC_CHECK_THREADS,181,17,40,12,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    CONTROL         "",IDC_CHECK_THREADS_SPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS,198,14,10,14
+    GROUPBOX        "After-check notification",IDC_STATIC,7,36,221,27
+    COMBOBOX        IDC_NOTIFICATION_TYPE,14,46,96,74,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Enable/Disable",IDC_ENABLE_NOTIFICATION,118,46,50,13
+    PUSHBUTTON      "Configure...",IDC_CONFIGURE_NOTIFICATION,172,46,50,13
+END
+
+IDD_NOTIFICATION_SOUND_SETTINGS DIALOGEX 0, 0, 204, 76
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Sound notification settings"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_SOUND_FILE,14,18,176,12,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Play",IDC_PLAY,14,34,50,13
+    PUSHBUTTON      "Set to beep",IDC_BEEP,86,34,50,13
+    PUSHBUTTON      "Browse...",IDC_BROWSE,140,34,50,13
+    GROUPBOX        "Sound to play",IDC_STATIC,7,7,190,45
+    DEFPUSHBUTTON   "OK",IDOK,94,56,50,13
+    PUSHBUTTON      "Cancel",IDCANCEL,147,56,50,13
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 2,2,0,1
+ PRODUCTVERSION 2,2,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "Comments", "Just another ACME tool!"
+            VALUE "CompanyName", "Execution"
+            VALUE "FileDescription", "WebWatch"
+            VALUE "FileVersion", "2.2.0.1"
+            VALUE "InternalName", "WebWatch.exe"
+            VALUE "LegalCopyright", "(c) 2002-2004 DEATH"
+            VALUE "OriginalFilename", "WebWatch.exe"
+            VALUE "ProductName", "WebWatch"
+            VALUE "ProductVersion", "2.2.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 271
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 171
+    END
+
+    IDD_MAIN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 259
+    END
+
+    IDD_SITE_GENERAL_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 192
+    END
+
+    IDD_SITE_CHECK_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 192
+    END
+
+    IDD_SITE_MU_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 192
+    END
+
+    IDD_SET_MU, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 169
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 39
+    END
+
+    IDD_SITE_CHECK, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 221
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 158
+    END
+
+    IDD_SITEGROUP_GENERAL_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 53
+    END
+
+    IDD_SITEGROUP_AUTO_CHECK_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 51
+    END
+
+    IDD_CHOOSE_GROUP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 211
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 173
+    END
+
+    IDD_REGEX_EDITOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 265
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 223
+    END
+
+    IDD_SETTINGS_GENERAL_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 34
+    END
+
+    IDD_SITEGROUP_PROXY_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 67
+    END
+
+    IDD_SETTINGS_SITE_LIST_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 63
+    END
+
+    IDD_SETTINGS_SITE_GROUPS_TREE_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 35
+    END
+
+    IDD_SETTINGS_MU_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 34
+    END
+
+    IDD_SETTINGS_CHECK_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 63
+    END
+
+    IDD_NOTIFICATION_SOUND_SETTINGS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 197
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 69
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAIN_MENU MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Settings...",                ID_FILE_SETTINGS
+        MENUITEM "&Hide",                       ID_FILE_SHOWHIDE
+        MENUITEM "E&xit",                       ID_FILE_EXIT
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "Update &Difference",          ID_VIEW_UPDATE_DIFFERENCE
+        MENUITEM "Order by &Importance",        ID_VIEW_ORDER_BY_IMPORTANCE
+    END
+    POPUP "Site &Group"
+    BEGIN
+        MENUITEM "Check...",                    ID_SITEGROUP_CHECK
+        MENUITEM "Unmark all sites",            ID_SITEGROUP_UNMARK_ALL_SITES
+
+        MENUITEM SEPARATOR
+        MENUITEM "Add child group...",          ID_SITEGROUP_ADD_CHILD_GROUP
+        MENUITEM "Import child group...",       ID_SITEGROUP_IMPORT_CHILD_GROUP
+
+        MENUITEM SEPARATOR
+        MENUITEM "Modify...",                   ID_SITEGROUP_MODIFY
+        MENUITEM "Remove",                      ID_SITEGROUP_REMOVE
+        MENUITEM "Merge with group...",         ID_SITEGROUP_MERGE_WITH_GROUP
+
+        MENUITEM SEPARATOR
+        MENUITEM "Move...",                     ID_SITEGROUP_MOVE
+        MENUITEM "Export...",                   ID_SITEGROUP_EXPORT
+    END
+    POPUP "&Site"
+    BEGIN
+        MENUITEM "Check...",                    ID_SITE_CHECK_SPECIFIC
+        MENUITEM "Browse...",                   ID_SITE_BROWSE
+        MENUITEM "Copy address",                ID_SITE_COPY_ADDRESS
+        MENUITEM SEPARATOR
+        MENUITEM "Mark as updated",             ID_SITE_MARK_AS_UPDATED
+        MENUITEM "Unmark",                      ID_SITE_UNMARK
+        MENUITEM SEPARATOR
+        MENUITEM "Begin MU session...",         ID_SITE_BEGIN_MU
+        MENUITEM "End MU session",              ID_SITE_END_MU
+        MENUITEM SEPARATOR
+        MENUITEM "Modify...",                   ID_SITE_MODIFY
+        MENUITEM "Remove",                      ID_SITE_REMOVE
+        MENUITEM "Move to group...",            ID_SITE_MOVE_TO_GROUP
+        MENUITEM SEPARATOR
+        MENUITEM "Add...",                      ID_SITE_ADD
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_TOOLBAR             BITMAP                  "res\\toolbar.bmp"
+IDB_TOOLBAR_DISABLED    BITMAP                  "res\\toolbar-disabled.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// JPEG
+//
+
+IDJ_ABOUT               JPEG                    "res\\WebWatch.jpg"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_SITE_LIST_ACCEL ACCELERATORS 
+BEGIN
+    VK_RETURN,      ID_SITE_ACTIVATE,       VIRTKEY, NOINVERT
+    "C",            ID_SITE_COPY_ADDRESS,   VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_SITE_COPY_ADDRESS,   VIRTKEY, CONTROL, NOINVERT
+    VK_MULTIPLY,    ID_SITE_INVERT_CBD,     VIRTKEY, NOINVERT
+    "M",            ID_SITE_MARK_AS_UPDATED, VIRTKEY, NOINVERT
+    "M",            ID_SITE_MODIFY,         VIRTKEY, CONTROL, NOINVERT
+    VK_DELETE,      ID_SITE_REMOVE,         VIRTKEY, NOINVERT
+    "A",            ID_SITE_SELECT_ALL,     VIRTKEY, CONTROL, NOINVERT
+    VK_ADD,         ID_SITE_SET_CBD,        VIRTKEY, NOINVERT
+    "U",            ID_SITE_UNMARK,         VIRTKEY, NOINVERT
+    VK_SUBTRACT,    ID_SITE_UNSET_CBD,      VIRTKEY, NOINVERT
+    VK_SPACE,       ID_SITE_INVERT_CBD,     VIRTKEY, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUT               "&About WebWatch..."
+    IDP_SOCKETS_INIT_FAILED "Windows sockets initialization failed."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#include "res\WebWatch.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

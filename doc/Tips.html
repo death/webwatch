@@ -1,0 +1,137 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Useful information gathered while developing WebWatch</title>
+</head>
+
+<body>
+
+<h2 dir="ltr"><u>Useful information gathered while developing WebWatch</u></h2>
+
+<p><u><b>1. A little about ListView columns</b></u></p>
+<p>If you're using a slow graphics card and resizing columns in the report-mode 
+ListView is slow, disable smooth scrolling (you can disable smooth scrolling 
+using TweakUI).</p>
+
+<p dir="ltr">A column width is automatically set to fit ListView contents if -1 
+is passed to SetColumnWidth(). It is also worth mentioning that if one double 
+clicks the header control in the divisors area, the column will be resized to 
+fit.</p>
+<p dir="ltr">It is usually a bad idea calling the DeleteItem() member of a 
+ListView's header control child window. Call DeleteColumn() member of the 
+ListView instead.</p>
+
+<p dir="ltr"><u><b>2. Passing XML data as parameter is almost the same as 
+passing a void pointer</b></u></p>
+<p dir="ltr">You can have anything, including irrelevant data in the XML. The 
+XML can only be examined at runtime, it is similar to using RTTI.</p>
+
+<p><u><b>3. Having a simple swap() function for a class designed to be inherited 
+from is a Bad Thing</b></u></p>
+<p dir="ltr">The bad thing about it is that swap(), unlike the assignment 
+operator, changes both objects. Suppose we have a class Base and a derived class 
+Derived. Base defines a void Base::Swap(Base &amp;) function. Derived defines a void 
+Derived::Swap(Derived &amp;) function. b1 and b2 are instantiations of the Base 
+class, d1 and d2 are instantiations of the derived one. Consider the following 
+cases:</p>
+<pre>b1.Swap(b2); // OK
+d1.Swap(d2); // OK
+d1.Swap(b1); // Compile-time error: Base::Swap() is hidden and b1 cannot be converted to a Derived class.
+b1.Swap(d1); // A not easily detected error: d1 is converted to Base &amp; - Only bases are being swapped (double-slicing effect?).</pre>
+<p>One could imagine a solution to this problem using double-dispatch engines 
+(multi-methods).</p>
+
+<p><u><b>4. Nested class access to their enclosing class</b></u></p>
+<p>According to the ISO CPP98 standard, a nested class does not have any 
+significant privilege over other classes in regard to access to its enclosing 
+class. However, there has been a Defect Report that says that a nested class is 
+a member of the enclosing class, therefore should have access to everything in 
+the enclosing class (like any other member). Therefore, the following example 
+should compile:</p>
+<div dir="ltr">
+  <pre><code>class Enclosing {
+    void Foo()
+    {
+    }
+public:
+    struct Nested {
+        Nested(Enclosing &amp; e)
+        {
+            e.Foo();
+        }
+    };
+};
+
+int main()
+{
+    Enclosing e;
+    Enclosing::Nested n(e);
+    return 0;
+}</code></pre>
+</div>
+
+<p><u><b>5. Efficient Pimpl assignment in derived classes</b></u></p>
+<p>In base class, a pimpl assignment usually goes like this:</p>
+<pre><code>Base &amp; Base::operator= (const Base &amp; other)
+{
+    if (this != &amp;other) {
+        Base temp(other);
+        std::swap(m_pimpl, temp.m_pimpl);
+    }
+    return *this;
+}</code></pre>
+<p>However, in the derived class, if we do the same (with the addition of 
+calling the base class's assignment operator), we construct a redundant Base 
+sub-object:</p>
+<pre><code>Derived &amp; Derived::operator= (const Derived &amp; other)
+{
+    if (this != &amp;other) {
+        Derived temp(other); // We don't need the base sub-object, yet we construct it
+        static_cast&lt;Base &amp;&gt;(*this) = other;
+        std::swap(m_pimpl, temp.m_pimpl);
+    }
+    return *this;
+}</code></pre>
+<p>A more efficient approach would be to construct a new Impl structure for the 
+derived class:</p>
+<pre><code>Derived &amp; Derived::operator= (const Derived &amp; other)
+{
+    if (this != &amp;other) {
+        std::auto_ptr&lt;Impl&gt; newImpl(new Impl(other.m_pimpl));
+        static_cast&lt;Base &amp;&gt;(*this) = other;
+        std::swap(m_pimpl, newImpl);
+    }
+    return *this;
+}</code></pre>
+
+<p>Notice that in both versions, I have placed the temporary construction before the base class assignment in 
+order to have strong exception safety (assuming the assignment to base doesn't 
+throw after modification of the object, which as shown is achieved). Also notice 
+that the Base can use this technique as well (construct its Impl instead of 
+another Base).</p>
+
+<p><u><b>6. Sometimes we need to define a destructor</b></u></p>
+<p>Consider this class definition:</p>
+<pre>class A
+{
+public:
+    void Foo();
+private:
+    struct Impl;
+    std::auto_ptr&lt;Impl&gt; m_pimpl;
+};</pre>
+<p>Here, we have a forward-declared structure, and an auto_ptr member variable 
+that wraps it. If we don't define any destructor, the compiler generates one for 
+us, but it sees only the forward declaration for Impl, so the deletion of the 
+data results in undefined behaviour if a non-trivial destructor/allocation 
+function/deallocation function are used for it. In this case, we need to declare 
+the destructor and define it in the same translation unit as Impl is defined in, 
+after it is defined - so the deletion will occur on a complete type.</p>
+
+</body>
+
+</html>

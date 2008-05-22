@@ -1,0 +1,290 @@
+                  WebWatch, by DEATH [ACME/EXECUTION]
+-------------------------------------------------------------------------
+             REMEMBER, WEBWATCH IS PRIVATE TO ACME MEMBERS
+-------------------------------------------------------------------------
+Using the program is pretty self-explanatory, however, here are some
+things to notice:
+
+VERSION 2.3 -
+------------------------------------------------------------------------
+    -   Default number of days for MU expiry is now 13.
+    -   Fixed rare crash bug (thanks to ParaBytes).
+    -   Added Edit regex button.
+    -   Fixed GMT/local time conversion.
+    -   Misc. changes.
+
+
+VERSION 2.2 - 11th of October, 2004
+------------------------------------------------------------------------
+    -   Added proxy support (in group settings).
+    -   Fixed notes saving.
+    -   Updated sites won't set back to non-updated sites after check.
+
+
+VERSION 2.1 - 2nd of October, 2004
+-------------------------------------------------------------------------
+    -   Removed CBD set/unset/invert from Site List popup menu. You can
+        still use them by using keyboard keys +/-/*, respectively.
+    -   Fixed a little bug causing WebWatch to blink notification area
+        icon after every check occuring after an update.
+    -   Fixed site move action.
+    -   WebWatch now uses a virtual list-view control, so it's much faster
+        dealing with a lot of sites. However, virtual list-views are very
+        poorly documented, especially about check boxes, sorting and
+        item selection issues - if you see a problem, tell me.
+
+
+VERSION 2.0 - 25th of September, 2004
+-------------------------------------------------------------------------
+    -   After a long, long wait - here it is! WebWatch version 2.0!
+        This is a complete rewrite of old WebWatch.
+
+    -   Since this is a full rewrite, bugs are expected. Tell me if (when)
+        you find some.
+
+    -   Notice that some things are missing, notably proxy support,
+        Site Duplicate Finder and Ident server for FTP.
+        They will arrive soon.
+
+    -   In this package you will find 'cvt.pl' - a converter for old
+        WebWatch configuration. It is a Perl script, therefore needs
+        a Perl interpreter installed in order to run.
+        You can grab it here:
+
+        http://downloads.activestate.com/
+            ActivePerl/Windows/5.8/ActivePerl-5.8.4.810-MSWin32-x86.zip
+
+        To use the script - rename WebWatch.xml to old.xml and run
+        'perl cvt.pl'. If all goes well, it will generate a new WebWatch.xml
+        that will work with new WebWatch. Also be sure to read the comment
+        at the beginning of the script.
+
+    -   In this version, you can check HTTP sites by content using regular
+        expressions - This a most powerful method, I suggest you give it
+        a try!
+
+    -   Some user interface changes are planned.
+
+
+VERSION 1.0 BUILD 4 REV 4 - 6th of April, 2004
+-------------------------------------------------------------------------
+    -   Fixed MU days calculation in another place (silly).
+    -   Fixed that annoying sort bug!
+
+
+VERSION 1.0 BUILD 4 REV 3 - 30th of March, 2004
+-------------------------------------------------------------------------
+    -   Fixed MU days calculation.
+    -   Using OpenSSL 0.9.7d.
+
+VERSION 1.0 BUILD 4 REV 2 - 25th of February, 2004
+-------------------------------------------------------------------------
+    -   Now backing old XML before saving.
+    -   XML code changed.
+    -   Added potential bug-fix and more debug sentinels.
+
+
+VERSION 1.0 BUILD 4 REV 1 - 25th of November, 2003
+-------------------------------------------------------------------------
+    -   Fixed positioning bug in WinXP.
+    -   Changed keyboard accelerators (shortcut keys).
+    -   WebWatch now handles sites with empty content correctly.
+    -   Site list control rewritten (also places settings in XML instead
+        of INI file).
+    -   Minor code adjustments.
+
+
+VERSION 1.0 BUILD 4 REV 0 - 14th of November, 2003
+-------------------------------------------------------------------------
+    -   Changed Import process's duplicate recognition, now will
+        recognize a duplicate site (in the same group) by URL only.
+    -   Added a site duplicate finder (Sites menu).
+    -   Added (experimental) SSL support (https:// sites).
+    -   Added another (sub-)filter, filtering out all script code in
+        the HTML.
+    -   Better supports case-insensitivity in HTTP headers and HTML
+        content.
+    -   Fixed Identd server bug.
+
+
+VERSION 1.0 BUILD 3 REV 0 - 24th of October, 2003
+-------------------------------------------------------------------------
+    -   Optimized XML class again.
+    -   Fixed a minor bug when creating a default group.
+    -   Additional information visible while update checking.
+        Note that there are two types of time-consuming actions that can
+        be prevented:
+        Redirect - The URL is forwarded to another URL. Avoid this
+                   by changing the address to the correct URL.
+        ByContent - The URL needs to be checked by content. Avoid
+                    this by marking check-by-content in site options.
+    -   Eliminated some memory leaks.
+    -   Internal adjustments in code.
+    -   Finally changed version format (swapped build/revision places
+        and updated their numbers to a correct representation).
+    -   Standard C++ library and MFC are now statically linked.
+    -   Fixed a potential bug related to internal site ID system.
+
+
+VERSION 1.0 BUILD 2 REV 7 - 26th of July, 2003
+-------------------------------------------------------------------------
+    -   Fixed a little priority issue of sites states.
+    -   Optimized XML class some more, and fixed a little bug.
+    -   Added Minor Update handling.
+
+
+VERSION 1.0 BUILD 2 REV 6 - 27th of April, 2003
+-------------------------------------------------------------------------
+    -   Hopefully, no more caching problems.
+    -   Now compiled against MFC 7.1.
+    -   Fixed a bug that occurs when the sites are sorted by update time
+        span and some sites aren't checked for update.
+
+
+VERSION 1.0 BUILD 2 REV 5 - 1st of April, 2003
+-------------------------------------------------------------------------
+    -   Tweaked some functions and removed some old code that was there for
+        backwards compatibility.
+    -   Little change in site group tree's drag & drop mechanism, now
+        doesn't flicker.
+    -   All times are now GMT.
+    -   WebWatch can now warn you of sites that redirect themselves too
+        much (therefore the update function's Time to live becomes zero).
+        These sites usually hosted on a fucked-up server, so you'll have
+        to find a mirror for them.
+
+
+VERSION 1.0 BUILD 2 REV 4 - 17th of March, 2003
+-------------------------------------------------------------------------
+    -   'Fixed' a very strange bug. I think it's a bug in Windows's IP
+        stack. Simple hack that delays some checks by 1 second (!) and
+        it's even faster now...
+
+
+VERSION 1.0 BUILD 2 REV 3 - 16th of March, 2003
+-------------------------------------------------------------------------
+    -   OK, fixed the HTTP GET method... Bare with me as I don't have
+        specifications ;).
+
+
+VERSION 1.0 BUILD 2 REV 2 - 16th of March, 2003
+-------------------------------------------------------------------------
+    -   WebWatch will warn about update-by-content size being more than
+        100Kb only if the site was updated. This also eliminates a bug.
+    -   Oops, really fucked up bug.. WebWatch will now actually connect
+        to the proxy when using HTTP GET method :), still the quirks in
+        the update date are apparent.
+
+
+VERSION 1.0 BUILD 2 REV 1 - 15th of March, 2003
+-------------------------------------------------------------------------
+    -   Fixed a bug when pressing escape on check dialog.
+    -   Added support for HTTP GET proxy (there are some quirks about
+        the update date, appearantly cannot be solved).
+
+
+VERSION 1.0 BUILD 2 REV 0 - 12th of March, 2003
+-------------------------------------------------------------------------
+    -   Auto Check is now done per group.
+    -   When auto checking and WebWatch is minimized, the check dialog
+        will hide itself.
+    -   If WebWatch is minimized and updated sites were found, WebWatch
+        will blink the notification icon.
+    -   WebWatch can optionally autosave settings every 5 minutes.
+    -   Made UI a bit more consistent.
+    -   Fixed a lame bug in About window :)
+
+
+VERSION 1.0 BUILD 1 REV 4 - 9th of March, 2003
+-------------------------------------------------------------------------
+    -   You now have the option to copy the address of the site to
+        clipboard.
+    -   Improved site management design. As a consequence WebWatch
+        will now preserve the site list state (of selected sites)
+        after performing operations, e.g. Add, Modify, etc.
+
+
+VERSION 1.0 BUILD 1 REV 3 - 6th of March, 2003
+-------------------------------------------------------------------------
+    -   Fixed a serious bug in XML string replace function.
+
+
+VERSION 1.0 BUILD 1 REV 2 - 5th of March, 2003
+-------------------------------------------------------------------------
+    -   Optimized some code, better memory usage and speed.
+    -   Fixed a little bug with updating the view/toolbar button
+        states.
+
+
+VERSION 1.0 BUILD 1 REV 1 - 1st of March, 2003
+-------------------------------------------------------------------------
+
+    -   WebWatch is now a stable program (no, not stable like horses,
+        stable like what Windows isn't).
+
+
+PRE-VERSION 1.0 - Since October 2002
+-------------------------------------------------------------------------
+
+    -   Some things were not tested properly, notify me wether they
+        work as expected or not..
+
+    -   Update-by-content was sped up, now uses If-Modified-Since
+        field for much faster update checking. This is experimental,
+        notify me if there are any problems.
+
+    -   Website authorization is now supported but not fully tested..
+
+    -   For FTP checking with wildcards, WebWatch should now return
+        the date of the newest file matched.. This wasn't properly
+        tested.
+
+    -   SOCKS4 proxy routines were rewritten but not fully tested!
+        Also wrote SOCKS5 proxy routines but not tested..
+        HTTP proxy routines were tested.
+        Contact me if there are any bugs..
+
+    -   The groups code was redesigned a few times. As a consequence,
+        some code might be wrong or buggy. Notify me if you find any
+        bugs.
+
+    -   FTP check supports wildcards. Say the filename changes each
+        version, e.g. ftp://ftp.nero.com/Nero5XXXX.exe, you can
+        add ftp://ftp.nero.com/Nero5*.exe . It is important to remember
+        that FTP filenames names can be case sensitive.
+
+    -   By default the site type is HTTP. FTP sites are denoted by
+        ftp:// tag before the URL.
+
+    -   FTP links cannot be checked by content (what's the use?).
+
+    -   WebWatch now has an ident server for FTP checks. That means
+        you can now comfortably check for new versions of WebWatch (for
+        ACME members), just add a site like this:
+
+ ftp://user:pass@Dump.address:port/MemberDirs/death/WebWatch/webwatch.zip
+
+        And set the correct ident for it.
+
+    -   If an HTTP site keeps 'updating', try forcing check by content and
+        using the HTTP filters.
+
+    -   I am quite paranoid about the design and code of WebWatch.
+        The first version was written (read: crapped) in a few hours
+        when I was real tired. So, if you find a bug, don't be surprised
+        (if you don't, be surprised :). Tell me about the bugs and they
+        shall be fixed (hopefully).
+
+    -   Note, this is a crappy version of WebWatch (like all previous
+        versions). This means EVERYTHING is experimental and unstable
+        and buggy and whatnot. When it's ready, it'll become version 1.0 .
+        This means changes from version to version might include
+        incompatibilities with previous versions. This was kind of solved
+        because I switched to using the XML format, which allows me
+        to extend stuff. However, design changes might occur.
+
+    -   Like Microsoft, even though it's a fucked-up version, I can introduce
+        new features. Tell me if you want anything.
+
+    -   This is a private release for ACME members only. If you're not an
+        ACME member and I didn't give it to you, "bend over bitch".

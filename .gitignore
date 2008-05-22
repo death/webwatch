@@ -1,0 +1,13 @@
+*~
+bin
+lib
+obj
+rel
+*.ncb
+*.suo
+*.bak
+*.vspscc
+*.vssscc
+*.scc
+*.aps
+BuildLog.htm
